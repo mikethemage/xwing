@@ -19682,13 +19682,24 @@ exportObj.BoYCheck = (data, faction='', shipCheck=false) ->
             return false
         for ship in exportObj.standardShipInclusions
             if (ship.faction == faction && (data.name == ship.name || data.ship == ship.name || (Array.isArray(data.ship) and ship.name in data.ship)))
-                if (data.base? and (data.base == "Medium"))
+                if (data.base? and (data.base == "Medium" or (faction == "Galactic Empire" and data.base == "Large") ))
                     return false
-                else
-                    return true
+                else                    
+                    if faction=="Galactic Empire" and data.upgrades?  #check imperial Standard Loadouts for Devices:                                       
+                        for upgradeName in data.upgrades                                                                              
+                            upgradeToCheck = exportObj.upgradesByUniqueName[upgradeName.canonicalize()]
+                            if upgradeToCheck?                                
+                                if upgradeToCheck[0].slot? && upgradeToCheck[0].slot == "Device"                                    
+                                    return false                       
+                        return true
+                    else
+                        return true
         return false
     else
-        return data.name not in exportObj.standardUpgradeExclusions
+        if faction=="Galactic Empire" and ((data.slot? and data.slot == "Device") or (data.also_occupies_upgrades? and "Device" in data.also_occupies_upgrades))
+            return false            
+        else
+            return data.name not in exportObj.standardUpgradeExclusions
 
 exportObj.standardCheckBrowser = (data, faction='', type) ->
     # check ship/pilot first
@@ -19748,6 +19759,8 @@ String::serialtoxws = ->
                 gamemode = 'extended'
             when 'h'
                 gamemode = 'standard'
+            when 'y'
+                gamemode = 'yavin'
             when 'e'
                 return "error: game mode not supported"
             when 'q'
