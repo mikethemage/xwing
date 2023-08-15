@@ -1781,7 +1781,10 @@ class exportObj.SquadBuilder
                 when 'h'
                     @changeGameTypeOnSquadLoad 'standard'
                 when 'y'
-                    @changeGameTypeOnSquadLoad 'yavin'
+                    if @faction == "Rebel Alliance" or @faction == "Galactic Empire"
+                        @changeGameTypeOnSquadLoad 'yavin'
+                    else
+                        @changeGameTypeOnSquadLoad 'standard'
                 when 'e'
                     @changeGameTypeOnSquadLoad 'epic'
                 when 'q'
