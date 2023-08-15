@@ -153,6 +153,7 @@ class exportObj.SquadBuilder
         @isStandard = exportObj.builders[0]?.isStandard ? true
         @isEpic = exportObj.builders[0]?.isEpic ? false
         @isQuickbuild = exportObj.builders[0]?.isQuickbuild ? false
+        @isYavin = exportObj.builders[0]?.isYavin ? false
 
         @backend = null
         @current_squad = {}
@@ -1723,6 +1724,8 @@ class exportObj.SquadBuilder
                 'h'
             when 'extended'
                 's'
+            when 'yavin'
+                'y'
             when 'epic'
                 'e'
             when 'quickbuild'
@@ -1777,6 +1780,8 @@ class exportObj.SquadBuilder
                     @changeGameTypeOnSquadLoad 'extended'
                 when 'h'
                     @changeGameTypeOnSquadLoad 'standard'
+                when 'y'
+                    @changeGameTypeOnSquadLoad 'yavin'
                 when 'e'
                     @changeGameTypeOnSquadLoad 'epic'
                 when 'q'
@@ -3525,7 +3530,7 @@ class exportObj.SquadBuilder
                 success = true
                 error = ""
 
-                if @isStandard then gamemode = 'h' else gamemode = 's'
+                if @isStandard then gamemode = 'h' else if @isYavin then gamemode='y' else gamemode = 's'
                 serialized_squad = ""
 
                 for pilot in xws.pilots
