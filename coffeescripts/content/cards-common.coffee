@@ -19685,12 +19685,11 @@ exportObj.BoYCheck = (data, faction='', shipCheck=false) ->
                 if (data.base? and (data.base == "Medium" or (faction == "Galactic Empire" and data.base == "Large") ))
                     return false
                 else                    
-                    if faction=="Galactic Empire" and data.upgrades?  #check imperial Standard Loadouts for Devices:                                       
+                    if faction=="Galactic Empire" and data.upgrades?  #check Imperial Standard Loadouts for Devices:                                       
                         for upgradeName in data.upgrades                                                                              
                             upgradeToCheck = exportObj.upgradesByUniqueName[upgradeName.canonicalize()]
-                            if upgradeToCheck?                                
-                                if upgradeToCheck[0].slot? && upgradeToCheck[0].slot == "Device"                                    
-                                    return false                       
+                            if upgradeToCheck? && upgradeToCheck[0].slot? && upgradeToCheck[0].slot == "Device"                                    
+                                return false                       
                         return true
                     else
                         return true
@@ -19760,7 +19759,7 @@ String::serialtoxws = ->
             when 'h'
                 gamemode = 'standard'
             when 'y'
-                gamemode = 'yavin'
+                gamemode = 'standard'  #export BoY lists to xws as Standard
             when 'e'
                 return "error: game mode not supported"
             when 'q'
