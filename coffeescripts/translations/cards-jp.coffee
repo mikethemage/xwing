@@ -113,7 +113,7 @@ exportObj.translations.日本語 =
         'Unreleased content warning': 'このスコードはリリース前のコンテンツを使用しています!'
         'Broken squad link warning': 'リンクが壊れていたようです。スコードをロードできませんでした!'
         'Collection warning': 'あなたのコレクションではこのリストを編成できません!'
-        'Ship number warning': 'トーナメントリーガルなスコードは3-8機の宇宙船が必要です!'
+        shipNumberWarning: (translator, data) -> "トーナメントリーガルなスコードは#{data[0]}-#{data[1]}機の宇宙船が必要です!"
         # Type selector
         'Extended': 'エクステンデッド'
         'Hyperspace': 'ハイパースペース'

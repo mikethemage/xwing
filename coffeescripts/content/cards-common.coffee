@@ -19676,6 +19676,20 @@ exportObj.standardCheck = (data, faction='', shipCheck=false) ->
     else
         return data.name not in exportObj.standardUpgradeExclusions
 
+exportObj.BoYCheck = (data, faction='', shipCheck=false) ->
+    if (shipCheck)
+        if (data.name in exportObj.standardPilotExclusions)
+            return false
+        for ship in exportObj.standardShipInclusions
+            if (ship.faction == faction && (data.name == ship.name || data.ship == ship.name || (Array.isArray(data.ship) and ship.name in data.ship)))
+                if (data.base? and (data.base == "Medium"))
+                    return false
+                else
+                    return true
+        return false
+    else
+        return data.name not in exportObj.standardUpgradeExclusions
+
 exportObj.standardCheckBrowser = (data, faction='', type) ->
     # check ship/pilot first
     if type == 'Pilot'

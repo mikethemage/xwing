@@ -173,7 +173,7 @@ exportObj.translations['Español'] =
         "Unreleased content warning": "¡Este escuadrón usa contenido aún no publicado!"
         "Broken squad link warning": "Parece que seguiste un enlace roto. ¡No se pudo cargar ningún escuadrón!"
         "Collection warning": "¡No puedes desplegar esta lista con tu colección!"
-        "Ship number warning": "¡Un escuadrón legal de torneo debe contener de 3 a 8 naves!"
+        shipNumberWarning: (translator, data) -> "¡Un escuadrón legal de torneo debe contener de #{data[0]} a #{data[1]} naves!"
         "Multi-Faction warning": "¡Las listas de múltiples facciones NUNCA son legales para torneos!"
         "XWS Import Dialog": "Importa tu lista a través de XWS a YASB.<br><i>XWS es un formato común para compartir listas entre aplicaciones.</i>"
         "Copy below simple text": "<p>Copie lo siguiente y pegarlo en otro lugar.</p>"
