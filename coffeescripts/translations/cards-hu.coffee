@@ -55,7 +55,7 @@ exportObj.translations.Magyar =
         'Unreleased content warning': 'Ez a raj kiadatlan tartalmat használ!'
         'Broken squad link warning': 'It appears that you followed a broken link. No squad could be loaded!'
         'Collection warning': 'Ez a lista nem vihető pályára a készletedből!'
-        'Ship number warning': 'Egy versenylista 2-8 hajót kell tartalmazzon!'
+        shipNumberWarning: (translator, data) -> "Egy versenylista #{data[0]}-#{data[1]} hajót kell tartalmazzon!"
         # Type selector
         'Extended': 'Kiterjesztett'
         'Hyperspace': 'Hyperspace'

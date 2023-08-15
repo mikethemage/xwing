@@ -165,6 +165,9 @@ class exportObj.SquadBuilder
         @current_obstacles = []
 
         @setupUI()
+ 
+        @status_container.find('.yavin-option').toggleClass 'd-none', @faction != "Rebel Alliance" and @faction != "Galactic Empire"
+
         if @faction == "All"
             @game_type_selector.val("epic").trigger('change')
         else
@@ -182,7 +185,7 @@ class exportObj.SquadBuilder
             @resetCurrentSquad()
             @addShip()
 
-    resetCurrentSquad: (initial_load=false) ->
+    resetCurrentSquad: (initial_load=false) ->        
         default_squad_name = @uitranslation('Unnamed Squadron')
 
         squad_name = $.trim(@squad_name_input.val()) or default_squad_name
@@ -236,6 +239,9 @@ class exportObj.SquadBuilder
         DEFAULT_RANDOMIZER_TIMEOUT_SEC = 4
         DEFAULT_RANDOMIZER_SHIP_LIMIT = 0
 
+        @min_ships = 3
+        @max_ships = 8
+
         @status_container = $ document.createElement 'DIV'
         @status_container.addClass 'container-fluid'
         @status_container.append $.trim """
@@ -254,6 +260,7 @@ class exportObj.SquadBuilder
                         <option value="standard" class="translated" defaultText="Standard" selected="selected">#{@uitranslation("Standard")}</option>
                         <option value="extended" class="translated" defaultText="Extended"></option>
                         <option value="epic" class="translated" defaultText="Epic"></option>
+                        <option class="yavin-option" value="yavin">Battle of Yavin</option>
                         <option value="quickbuild" class="translated" defaultText="Quickbuild"></option>
                     </select>
                 </div>
@@ -264,7 +271,7 @@ class exportObj.SquadBuilder
                     <span class="content-warning loading-failed-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="Broken squad link warning"></span></span>
                     <span class="content-warning old-version-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="This squad was created for an older version of X-Wing."></span></span>
                     <span class="content-warning collection-invalid d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="Collection warning"></span></span>
-                    <span class="content-warning ship-number-invalid-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="Ship number warning"></span></span>
+                    <span class="content-warning ship-number-invalid-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="ship-number-warning" defaultText="Ship number warning"></span></span>
                     <span class="content-warning multi-faction-warning-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="Multi-Faction warning"></span></span>
                     <span class="content-warning epic-not-legal-container d-none"><br /><i class="fa fa-exclamation-circle"></i>&nbsp;<span class="translated" defaultText="Epic Unofficial"></span></span>
                 </div>
@@ -656,6 +663,7 @@ class exportObj.SquadBuilder
         @loading_failed_container = $ @points_container.find('.loading-failed-container')
         @old_version_container = $ @points_container.find('.old-version-container')
         @ship_number_invalid_container = $ @points_container.find('.ship-number-invalid-container')
+        @ship_number_warning_container = $ @points_container.find('.ship-number-warning')
         @multi_faction_warning_container = $ @points_container.find('.multi-faction-warning-container')
         @epic_not_legal_container = $ @points_container.find('.epic-not-legal-container')
         @collection_invalid_container = $ @points_container.find('.collection-invalid')
@@ -1483,6 +1491,9 @@ class exportObj.SquadBuilder
         @isStandard = false
         @isEpic = false
         @isQuickbuild = false
+        @isYavin = false
+        @min_ships = 3
+        @max_ships = 8
         @epic_not_legal_container.toggleClass 'd-none', true
         switch gametype
             when 'extended'
@@ -1494,6 +1505,11 @@ class exportObj.SquadBuilder
             when 'quickbuild'
                 @isQuickbuild = true
                 @desired_points_input.val 8
+            when 'yavin'
+                @isYavin = true
+                @desired_points_input.val 35
+                @min_ships = 4
+                @max_ships = 10
             else
                 @isStandard = true
                 @desired_points_input.val 20
@@ -1506,6 +1522,8 @@ class exportObj.SquadBuilder
             @container.trigger 'xwing:pointsUpdated', $.noop
             @container.trigger 'xwing:shipUpdated'
         cb()
+
+        @checkNumberShips()
 
     addStandardizedToList: (ship) ->
         ship.addStandardizedUpgrades()
@@ -1867,12 +1885,19 @@ class exportObj.SquadBuilder
             throw new Error("Unique #{type} '#{unique.name}' not in use")
         cb()
 
+    
+    checkNumberShips: ->
+        @ship_number_invalid_container.toggleClass 'd-none', @isEpic or (@ships.length < @max_ships + 2 and @ships.length > @min_ships) # bounds are min_ships..max_ships+2 as we always have a "empty" ship at the bottom
+        @ship_number_warning_container.text @uitranslation("shipNumberWarning", @min_ships, @max_ships)
+    
     addShip: ->
         new_ship = new Ship
             builder: this
             container: @ship_container
         @ships.push new_ship
-        @ship_number_invalid_container.toggleClass 'd-none', (@ships.length < 10 and @ships.length > 3) # bounds are 2..10 as we always have a "empty" ship at the bottom
+
+        @checkNumberShips()
+        
         @multi_faction_warning_container.toggleClass 'd-none', (@faction != "All")
         new_ship
 
@@ -1882,7 +1907,9 @@ class exportObj.SquadBuilder
             await @container.trigger 'xwing:pointsUpdated', defer()
             @current_squad.dirty = true
             @container.trigger 'xwing-backend:squadDirtinessChanged'
-            @ship_number_invalid_container.toggleClass 'd-none', (@ships.length < 10 and @ships.length > 3)
+
+            @checkNumberShips()
+            
             @multi_faction_warning_container.toggleClass 'd-none', (@faction != "All")
         cb()
     
@@ -1908,6 +1935,8 @@ class exportObj.SquadBuilder
         # this method is not even invoked by most quickbuild stuff to check availability for quickbuild squads, as the method was formerly just telling apart extended/standard
         if @isQuickbuild
             return true
+        else if @isYavin
+            return exportObj.BoYCheck(item_data, @faction, shipCheck)
         else if @isStandard
             return exportObj.standardCheck(item_data, @faction, shipCheck)
         else if (not @isEpic)

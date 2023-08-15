@@ -113,7 +113,8 @@ exportObj.translations.English =
         "Unreleased content warning": "This squad uses unreleased content!"
         "Broken squad link warning": "It appears that you followed a broken link. No squad could be loaded!"
         "Collection warning": "You cannot field this list with your collection!"
-        "Ship number warning": "A tournament legal squad must contain 3-8 ships!"
+        shipNumberWarning: (translator, data) -> # data[0] is min ships, data[1] is max ships
+            "A tournament legal squad must contain #{data[0]}-#{data[1]} ships!"
         "Multi-Faction warning": "Multi-Faction Lists are NEVER tournament legal!"
         "Epic Unofficial": "Epic points are unofficial and not supported, endorsed, or accepted by AMG. Also, not balanced, so don't expect updates or it to be good. Please don't make a big deal about it."
         "XWS Import Dialog": "Import your list via XWS into YASB.<br><i>XWS is a common format to share lists between applications.</i>"
