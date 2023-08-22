@@ -4779,7 +4779,7 @@ class Ship
             return true
 
         for upgrade in @upgrades
-            if upgrade?.data? and (not exportObj.isReleased upgrade.data) and (not upgrade.data.standard?)
+            if upgrade?.data? and not exportObj.isReleased upgrade.data
                 #console.log "#{upgrade.data.id} is unreleased"
                 return true
 
