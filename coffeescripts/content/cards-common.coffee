@@ -19675,13 +19675,13 @@ exportObj.standardCheck = (data, faction='', shipCheck=false) ->
     else
         return data.name not in exportObj.standardUpgradeExclusions
 
-exportObj.BoYCheck = (data, faction='', shipCheck=false) ->
+exportObj.BoYCheck = (data, faction='', shipCheck=false, hasLargeShip=false) ->
     if (shipCheck)
         if (data.name in exportObj.standardPilotExclusions)
             return false
         for ship in exportObj.standardShipInclusions
             if (ship.faction == faction && (data.name == ship.name || data.ship == ship.name || (Array.isArray(data.ship) and ship.name in data.ship)))
-                if (data.base? and (data.base == "Medium" or (faction == "Galactic Empire" and data.base == "Large") ))
+                if (data.base? and (data.base == "Medium" or ((faction == "Galactic Empire" or hasLargeShip) and data.base == "Large") ))
                     return false
                 else                    
                     if faction=="Galactic Empire" and data.upgrades?  #check Imperial Standard Loadouts for Devices:                                       

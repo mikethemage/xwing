@@ -1944,7 +1944,12 @@ class exportObj.SquadBuilder
         if @isQuickbuild
             return true
         else if @isYavin
-            return exportObj.BoYCheck(item_data, @faction, shipCheck)
+            hasLargeShip=false
+            for ship in @ships
+                if ship.data? && ship.data.base? && ship.data.base=="Large"
+                    hasLargeShip=true
+                    break
+            return exportObj.BoYCheck(item_data, @faction, shipCheck, hasLargeShip)
         else if @isStandard
             return exportObj.standardCheck(item_data, @faction, shipCheck)
         else if (not @isEpic)
