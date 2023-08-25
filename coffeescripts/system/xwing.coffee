@@ -186,7 +186,7 @@ class exportObj.SquadBuilder
             @resetCurrentSquad()
             @addShip()
 
-    resetCurrentSquad: (initial_load=false) ->        
+    resetCurrentSquad: (initial_load=false) ->
         default_squad_name = @uitranslation('Unnamed Squadron')
 
         squad_name = $.trim(@squad_name_input.val()) or default_squad_name
