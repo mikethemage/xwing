@@ -395,7 +395,7 @@ exportObj.basicCardData = ->
             ]
         "YT-2400 Light Freighter":
             name: "YT-2400 Light Freighter"
-            factions: [ "Rebel Alliance" ]
+            factions: [ "Rebel Alliance", "Scum and Villainy" ]
             attackdt: 3
             agility: 2
             hull: 6
@@ -10412,7 +10412,6 @@ exportObj.basicCardData = ->
             points: 3
             loadout: 7
             slots: [
-                "Talent"
                 "Tech"
                 "Turret"
                 "Missile"
