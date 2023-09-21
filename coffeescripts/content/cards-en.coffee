@@ -187,10 +187,10 @@ exportObj.translations.English =
                     Quick Build Support: Patrick Mischke</p>
 
                     <p>This builder is unofficial and is not affiliated with Atomic Mass Games, Lucasfilm Ltd., or Disney.</p>
-
-                    <p>This site will always be free, and always 100% available for all people to use. However, if you want to donate, a button is prepared for you.</p>
                     <p><a href="privacy.html">Privacy Policy</a></p>
-                    <p><button class="btn btn-primary paypal" onclick="window.open('https://paypal.me/raithos');">Donate</button> <button class="btn btn-primary paypal" onclick="window.open('https://www.patreon.com/raithos');">Patreon</button></p>
+
+                    <p>This site will always be free, and always 100% available for all people to use. If you want to support me, I also have a podcast, please check that out!</p>
+                    <p><button class="btn btn-success podcast" onclick="window.open('http://offmeta.club');">Off-Meta Podcast</button> <button class="btn btn-primary paypal" onclick="window.open('https://paypal.me/raithos');">Donate</button> <button class="btn btn-primary patreon" onclick="window.open('https://www.patreon.com/raithos');">Patreon</button> </p>
         """
         "Continue to OAuth provider": "This will open a new window to let you authenticate with the chosen provider. You may have to allow pop ups for this site."
         "iOS requires cross-site control": """Due to a new feature in iOS systems OAuth won't work unless you enable "cross-site control"."""
@@ -1855,11 +1855,17 @@ exportObj.cardLoaders.English = () ->
         "Dash Rendar (YLF-SL)":
            display_name: """Dash Rendar (YLF-SL)"""
            text: """After you gain a red token as a result of moving through or overlapping an obstacle, you may transfer that red token to a friendly ship at range 0-1."""
+        "Dash Rendar (Scum)":
+           display_name: """Dash Rendar"""
+           text: """After you gain a red token as a result of moving through or overlapping an obstacle, you may transfer that red token to a friendly ship at range 0-1."""
         '"Leebo" (YLF)':
            display_name: """“Leebo” (YLF)"""
            text: """After you defend or perform an attack, if you spent a calculate token, gain 1 calculate token."""
         '"Leebo" (YLF-SL)':
            display_name: """“Leebo” (YLF-SL)"""
+           text: """At the end of the Engagement Phase, you may spend a calculate token to acquire a lock on an enemy ship at range 2-3."""
+        '"Leebo" (Scum)':
+           display_name: """“Leebo”"""
            text: """At the end of the Engagement Phase, you may spend a calculate token to acquire a lock on an enemy ship at range 2-3."""
 
         # Hotshots and Aces 2
@@ -2097,7 +2103,7 @@ exportObj.cardLoaders.English = () ->
            text: """Gain a %FRONTARC% primary weapon with a value of “3.”%LINEBREAK%During the End Phase, do not remove up to 2 focus tokens."""
         "Outrider":
            display_name: """Outrider"""
-           text: """ While you perform an attack that is obstructed by an obstacle, the defender rolls 1 fewer defense die. %LINEBREAK% After you fully execute a maneuver, if you moved through or overlapped an obstacle, you may remove 1 of your red or orange tokens. %LINEBREAK% <i>Errata (since rules reference 1.0.2): changed "obstructed attack" to "an attack that is obstructed by an obstacle"</i>"""
+           text: """While you perform a primary attack at range 3, roll 1 additional attack die. %LINEBREAK% While you perform an attack that is obstructed by an obstacle, you may change one of the defender's %EVADE% results to a %FOCUS% result. %LINEBREAK% <i>Errata (since errata 1.8): new gametext</i>"""
         "Phantom":
            display_name: """Phantom"""
            text: """You can dock at range 0-1."""
@@ -3222,9 +3228,6 @@ exportObj.cardLoaders.English = () ->
         '"Leebo" (YLF)':
            display_name: """“Leebo”"""
            text: """After you repair a damage card, you may perform an action from your action bar."""
-        "Outrider (YLF)":
-           display_name: """Outrider"""
-           text: """While you perform a primary attack at range 3, roll 1 additional attack die. %LINEBREAK% While you perform an attack that is obstructed by an obstacle, you may spend one of the defender's %EVADE% results to a %FOCUS% result."""
         "Efficient Processing (YLF)":
            display_name: """Efficient Processing"""
            text: """After you perform a %CALCULATE% action, gain 1 calculate token."""

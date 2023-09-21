@@ -1369,7 +1369,7 @@ class exportObj.SquadBuilder
 
             # Version number
             @printable_container.find('.fancy-under-header').append $.trim """
-                <div class="version">Points Version: 06/09/2023</div>
+                <div class="version">Points Version: 09/08/2023</div>
             """
                     
             # Notes, if present
@@ -1994,7 +1994,7 @@ class exportObj.SquadBuilder
             # select available pilots according to ususal pilot selection
             available_faction_pilots = (pilot for pilot_name, pilot of exportObj.pilots when (not ship? or pilot.ship == ship) and @isOurFaction(pilot.faction) and (@matcher(pilot_name, term) or (pilot.display_name and @matcher(pilot.display_name, term)) ) and (@isItemAvailable(pilot, true)))
 
-            eligible_faction_pilots = (pilot for pilot_name, pilot of available_faction_pilots when (not pilot.unique? or pilot not in @uniques_in_use['Pilot'] or pilot.canonical_name.getXWSBaseName() == include_pilot?.canonical_name.getXWSBaseName()) and (not pilot.max_per_squad? or @countPilots(pilot.canonical_name) < pilot.max_per_squad or pilot.canonical_name.getXWSBaseName() == include_pilot?.canonical_name.getXWSBaseName()) and (not pilot.upgrades? or @standard_restriction_check(pilot)) and (not pilot.restriction_func? or pilot.restriction_func((builder: @) , pilot)))
+            eligible_faction_pilots = (pilot for pilot_name, pilot of available_faction_pilots when (not pilot.unique? or pilot not in @uniques_in_use['Pilot'] or pilot.canonical_name.getXWSBaseName() == include_pilot?.canonical_name.getXWSBaseName()) and (not pilot.max_per_squad? or @countPilots(pilot.canonical_name) < pilot.max_per_squad or pilot.canonical_name.getXWSBaseName() == include_pilot?.canonical_name.getXWSBaseName()) and (not pilot.upgrades? or @standard_restriction_check(pilot, include_pilot)) and (not pilot.restriction_func? or pilot.restriction_func((builder: @) , pilot)))
 
             # Re-add selected pilot
             if include_pilot? and include_pilot.unique? and (@matcher(include_pilot.name, term) or (include_pilot.display_name and @matcher(include_pilot.display_name, term)) )
@@ -2060,15 +2060,16 @@ class exportObj.SquadBuilder
         retval
 
 
-    standard_restriction_check: (pilot) ->
+    standard_restriction_check: (pilot, set_pilot) ->
         if pilot.upgrades?
             for upgrade in pilot.upgrades
                 upgrade_data = exportObj.upgrades[upgrade]
                 if upgrade_data.unique == true
                     for ship in @ships
-                        for shipupgrade in ship.upgrades
-                            if shipupgrade?.data?.canonical_name == upgrade_data.canonical_name
-                                return false
+                        if not (ship.pilot?.name? and set_pilot?.name? and ship.pilot.name == set_pilot.name)
+                            for shipupgrade in ship.upgrades
+                                if shipupgrade?.data?.canonical_name == upgrade_data.canonical_name
+                                    return false
         return true
 
     dfl_filter_func = ->
@@ -3447,7 +3448,7 @@ class exportObj.SquadBuilder
                     builder: 'YASB - X-Wing 2.5'
                     builder_url: window.location.href.split('?')[0]
                     link: @getPermaLink()
-            version: '06/09/2023'
+            version: '09/08/2023'
             # there is no point to have this version identifier, if we never actually increase it, right?
 
         for ship in @ships
@@ -3693,7 +3694,7 @@ class Ship
             # filter out upgrades that can be copied
             other_upgrades = {}
             for upgrade in other.upgrades
-                if upgrade?.data? and not upgrade.data.standardized? and not upgrade.data.unique and ((not upgrade.data.max_per_squad?) or @builder.countUpgrades(upgrade.data.canonical_name) < upgrade.data.max_per_squad)
+                if upgrade?.data? and not upgrade.data.standardized? and not upgrade.data.standard? and not upgrade.data.unique and ((not upgrade.data.max_per_squad?) or @builder.countUpgrades(upgrade.data.canonical_name) < upgrade.data.max_per_squad)
                     other_upgrades[upgrade.slot] ?= []
                     other_upgrades[upgrade.slot].push upgrade
             # set them aside any upgrades that don't fill requirements due to additional slots and then attempt to fill them
@@ -3748,8 +3749,8 @@ class Ship
         if @builder.show_points_destroyed == true
             @points_destroyed_button.fadeIn 'fast'
 
-        # Ship background
-        @row.addClass "ship-#{ship_type.toLowerCase().replace(/[^a-z0-9]/gi, '')}"
+        # Ship background, Commented out to comply with AMG policies
+        # @row.addClass "ship-#{ship_type.toLowerCase().replace(/[^a-z0-9]/gi, '')}"
 
         @builder.container.trigger 'xwing:shipUpdated'
 
